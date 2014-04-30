@@ -1,6 +1,6 @@
 <!doctype html>
 {% load staticfiles %}
-<html lang="en" ng-app="racestats">
+<html lang="en" ng-app="tictactoe">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,9 +12,12 @@
 
   <div class="container" ng-view></div>
 
-  <script src="{% static 'lib/angular/angular.js' %}"></script>
-  <script src="{% static 'lib/angular/angular-resource.js' %}"></script>
-  <script src="{% static 'lib/angular/angular-strap.js' %}"></script>
+  <script src="{% static 'lib/angular/angular.min.js' %}"></script>
+  <script src="{% static 'lib/angular/angular-route.min.js' %}"></script>
+  <script src="{% static 'lib/angular/angular-resource.min.js' %}"></script>
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="{% static 'js/app.js' %}"></script>
+  <script src="{% static 'js/controllers.js' %}"></script>
+  <script src="{% static 'js/services.js' %}"></script>
 </body>
 </html>

@@ -1,3 +1,8 @@
 body {
   padding-top: 50px;
 }
+
+
+.gameboard > div {
+  height: 100px;
+}

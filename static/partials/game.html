@@ -1,0 +1,13 @@
+<h2>Game</h2>
+
+<h3>Welcome, {{ game.player_name }}</h3>
+
+<div class="container">
+  <div class="gameboard row col-lg-3 text-center">
+    <div ng-repeat="tile in tiles track by $index" data-attr-index="{{ $index }}" class="text-center col-lg-4">
+      <span class="btn btn-default" type="button" ng-disabled="{{ tile.disabled }}">
+        {{tile.val | gamemove}}
+      </span>
+    </div>
+  </div>
+</div>

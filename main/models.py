@@ -1,6 +1,7 @@
 from django.db import models
 import json
 import constants
+from cpuplayer import CPUPlayer
 
 class Game(models.Model):
   GAME_STATES = (
@@ -18,10 +19,31 @@ class Game(models.Model):
   def serialize_board(self):
     current_board = json.loads(self.board)
     for move in self.move_set.all():
-      print "%s %s" % (move.position, move.player_type)
       current_board[ str(move.position) ] = move.player_type
 
     return json.dumps(current_board) 
+
+  def check_game_state(self):
+    # Check for draw
+    current_board = json.loads(self.board)
+
+    open_moves = 0
+    for i in range(0, 9):
+      if current_board[str(i)] == 0:
+        open_moves += 1
+
+    if open_moves == 0:
+      return constants.STATE_DRAW
+
+    player = CPUPlayer(current_board)
+    winner = player.has_won(current_board)
+
+    if winner == constants.PLAYER:
+      return constants.STATE_PLAYERWON
+    elif winner == constants.CPU:
+      return constants.STATE_CPUWON
+
+    return constants.STATE_INPROGRESS
 
   def save(self, *args, **kwargs):
     if not self.pk:
@@ -41,6 +63,7 @@ class Game(models.Model):
       self.game_state = constants.STATE_INPROGRESS
     else:
       self.board = self.serialize_board()
+      self.game_state = self.check_game_state()
 
     super(Game, self).save(*args, **kwargs)
 
@@ -59,16 +82,28 @@ class Move(models.Model):
   created = models.DateTimeField(auto_now_add=True)
   game = models.ForeignKey('Game')
 
+  def generate_cpu_move(self):
+    player = CPUPlayer(self.game.board)
+    return int(player.get_best_move())
+
   def save(self, *args, **kwargs):
+    print self.game.game_state
     # If the related Game is finished, don't allow the Move to be saved
     if self.game.game_state is not constants.STATE_INPROGRESS:
       return False
 
-    # Update the related Game object when a new Move is created
-    if not self.pk:
-      self.game.save()
-
     super(Move, self).save(*args, **kwargs) 
+
+    # Save the related game object after we've updated
+    self.game.save()
+
+    # If it's the CPU's turn, generate that play 
+    if self.game.game_state == constants.STATE_INPROGRESS and self.player_type == constants.PLAYER:
+      cpu_move = Move()
+      cpu_move.player_type = constants.CPU
+      cpu_move.position = self.generate_cpu_move()
+      cpu_move.game = Game.objects.get(pk=self.game.pk)
+      cpu_move.save()
 
   def __unicode__(self):
     return "Game #%s - %s selects %d at %s" % (self.game.pk, self.get_player_type_display(), self.position, self.created)

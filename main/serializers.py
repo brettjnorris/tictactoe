@@ -4,7 +4,7 @@ from rest_framework import serializers
 class MoveSerializer(serializers.ModelSerializer):
   class Meta:
     model = Move
-    fields = ('id', 'game', 'position')
+    fields = ('id', 'game', 'position', 'player_type')
 
 
 class GameSerializer(serializers.ModelSerializer):

@@ -104,6 +104,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Override Django Rest Framework's trailing slash redirect
+APPEND_SLASH = False
+
 # Override any settings with local_settings.py
 try:
     from local_settings import *

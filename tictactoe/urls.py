@@ -6,7 +6,7 @@ from main import views
 from django.contrib import admin
 admin.autodiscover()
 
-router = routers.DefaultRouter()
+router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'games', views.GameViewSet)
 router.register(r'moves', views.MoveViewSet)
 

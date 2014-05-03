@@ -4,9 +4,9 @@
 
 angular.module('tictactoe.controllers', []).
   controller('GameController', 
-    ['$scope', '$routeParams', '$timeout',  'Game', 'Move', 
-      function($scope, $routeParams, $timeout, Game, Move) {
-        $scope.wins = { 'CPU': 0, 'Player': 0 };
+    ['$scope', '$routeParams', '$timeout', '$cookies', 'Game', 'Move', 
+      function($scope, $routeParams, $timeout, $cookies, Game, Move) {
+        $scope.wins = { 'CPU': 0, 'Player': 0, 'Draw': 0 };
 
         $scope.syncGame = function(id) {
           return Game.get({gameId: id}, function(game) {
@@ -24,11 +24,13 @@ angular.module('tictactoe.controllers', []).
 
             switch(game.game_state) {
               case 1:
-                $scope.game_state = { 
+                $scope.game_state = {
                   state: 1,
                   type: 'info',
                   message: 'The game has ended in a draw! There is no winner.'
                 };
+
+                $scope.wins.Draw++;
                 break;
               case 2:
                 $scope.game_state = {
@@ -60,6 +62,7 @@ angular.module('tictactoe.controllers', []).
 
             $cookies.cpu_wins = $scope.wins.CPU;
             $cookies.player_wins = $scope.wins.Player;
+            $cookies.draws = $scope.wins.Draw;
           });
         };
 
@@ -72,10 +75,10 @@ angular.module('tictactoe.controllers', []).
         $scope.makeMove = function($event) {
           var position = parseInt($( $event.target ).attr('data-attr-index'), 10);
 
-          if ($scope.game_state.state != 0 ) {
+          if ($scope.game_state.state !== 0 ) {
             return;
           }
-          
+
           var newMove = new Move({game: $scope.gameId, position: position, player_type: 'p'}).$save(function(move) {
             $timeout(function() {
               $scope.syncGame($scope.gameId);

@@ -3,6 +3,7 @@
 // Declare app level module which depends on filters, and services
 angular.module('tictactoe', [
     'ngRoute',
+    'ngCookies',
     'tictactoe.services',
     'tictactoe.controllers',
     'tictactoe.filters']).

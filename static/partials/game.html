@@ -1,13 +1,39 @@
-<h2>Game</h2>
+<div class="page-header">
+  <h1>Tic Tac Toe</h1>
+</div>
 
-<h3>Welcome, {{ game.player_name }}</h3>
+<div class="well">
+  <p>The rules are simple:</p>
+  <ul>
+    <li>You will be competing against the computer player</li>
+    <li>You get to move first</li>
+    <li>Three in row wins</li>
+    <li>Try to bet the computer player</li>
+  </ul>
+</div>
+
 
 <div class="container">
-  <div class="gameboard row col-lg-3 text-center">
-    <div ng-repeat="tile in tiles track by $index" data-attr-index="{{ $index }}" class="text-center col-lg-4">
-      <span class="btn btn-default" type="button" ng-disabled="{{ tile.disabled }}">
+  CPU Wins: {{ wins.CPU }}
+  Player Wins: {{ wins.Player }}
+</div>
+   
+
+<div class="container col-lg-6 col-lg-offset-3">
+  <h3>Welcome, 
+    <input type="text" placeholder="Name" value="{{ player_name }}">
+    <button type="submit" class="btn btn-success" ng-click="newGame()">New Game</button>
+  </h3>
+
+  <div class="alert alert-{{ game_state.type }}">{{ game_state.message }}</div>
+
+  <div class="gameboard row col-lg-12 text-center">
+    <div ng-click="makeMove($event)" ng-repeat="tile in tiles track by $index" 
+      data-attr-index="{{ $index }}" class="tile text-center col-lg-4" >
         {{tile.val | gamemove}}
-      </span>
     </div>
   </div>
+    
 </div>
+
+<input type="hidden" name="gameId" val="{{ gameId }}" />

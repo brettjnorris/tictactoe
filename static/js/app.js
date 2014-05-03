@@ -6,7 +6,11 @@ angular.module('tictactoe', [
     'tictactoe.services',
     'tictactoe.controllers',
     'tictactoe.filters']).
-  config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/game/:id', {templateUrl: '/static/partials/game.html', controller: 'GameController'});
+  config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
+    $routeProvider.when('/', {templateUrl: '/static/partials/game.html', controller: 'GameController'});
     $routeProvider.otherwise({redirectTo: '/'});
+
+    // Add csrf support for POST requests
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken'; 
   }]);

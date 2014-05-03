@@ -3,6 +3,12 @@ body {
 }
 
 
-.gameboard > div {
+.gameboard .tile {
   height: 100px;
+  line-height: 100px;
+  font-size: 3em;
+}
+
+.gameboard .tile:hover {
+  background-color: #ccc;
 }

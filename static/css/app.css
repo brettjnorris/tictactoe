@@ -12,3 +12,16 @@ body {
 .gameboard .tile:hover {
   background-color: #ccc;
 }
+
+.scoreboard .score {
+  width: 100%;
+}
+
+.gameboard .tile:nth-child(-n+6) {
+  border-bottom: 2px solid #ccc;
+}
+
+.gameboard .tile:nth-child(3n+1),
+.gameboard .tile:nth-child(3n+2) {
+  border-right: 2px solid #ccc;
+}

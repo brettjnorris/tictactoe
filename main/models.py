@@ -87,7 +87,6 @@ class Move(models.Model):
     return int(player.get_best_move())
 
   def save(self, *args, **kwargs):
-    print self.game.game_state
     # If the related Game is finished, don't allow the Move to be saved
     if self.game.game_state is not constants.STATE_INPROGRESS:
       return False

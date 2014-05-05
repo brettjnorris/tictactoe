@@ -6,7 +6,25 @@ angular.module('tictactoe.controllers', []).
   controller('GameController', 
     ['$scope', '$routeParams', '$timeout', '$cookies', 'Game', 'Move', 
       function($scope, $routeParams, $timeout, $cookies, Game, Move) {
-        $scope.wins = { 'CPU': 0, 'Player': 0, 'Draw': 0 };
+        
+
+        if (!$cookies.cpu_wins) {
+          $cookies.cpu_wins = 0;
+        }
+
+        if (!$cookies.player_wins) {
+          $cookies.player_wins = 0;
+        }
+
+        if (!$cookies.draws) {
+          $cookies.draws = 0;
+        }
+
+        $scope.wins = {
+          'CPU': $cookies.cpu_wins,
+          'Player': $cookies.player_wins,
+          'Draw': $cookies.draws
+        };
 
         $scope.syncGame = function(id) {
           return Game.get({gameId: id}, function(game) {
@@ -60,9 +78,7 @@ angular.module('tictactoe.controllers', []).
             $scope.player_name = game.player_name;
             $scope.gameId = game.id;
 
-            $cookies.cpu_wins = $scope.wins.CPU;
-            $cookies.player_wins = $scope.wins.Player;
-            $cookies.draws = $scope.wins.Draw;
+            $scope.saveCookies();
           });
         };
 
@@ -85,6 +101,12 @@ angular.module('tictactoe.controllers', []).
               $scope.syncGame($scope.gameId);
             }, 100, 5);
           });
+        };
+
+        $scope.saveCookies = function() {
+          $cookies.cpu_wins = $scope.wins.CPU;
+          $cookies.player_wins = $scope.wins.Player;
+          $cookies.draws = $scope.wins.Draw;
         };
       }
     ]

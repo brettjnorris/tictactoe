@@ -74,8 +74,9 @@ angular.module('tictactoe.controllers', []).
 
         $scope.makeMove = function($event) {
           var position = parseInt($( $event.target ).attr('data-attr-index'), 10);
+          var disabled = $($event.target).attr('disabled') == "disabled";
 
-          if ($scope.game_state.state !== 0 ) {
+          if ($scope.game_state.state !== 0 || disabled) {
             return;
           }
 
